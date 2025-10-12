@@ -47,17 +47,17 @@ def play_single_round():
 def play_round():
     ruch_gracza = get_player_move()
     ruch_komputera = random.choice(MOZLIWE_RUCHY)
-    if ruch_gracza == ruch_komputera:
-        print("Remis w tej rundzie!\n")
-        return "remis"
 
-    elif ZASADY[ruch_gracza] == ruch_komputera:
-        print("Wygrałeś rundę!\n")
-        return "gracz"
+    print(f"Komputer zagrywa: {ruch_komputera}")
+
+    wynik = determine_winner(ruch_gracza, ruch_komputera)
+    if wynik == "gracz":
+        print("Wygrales runde!\n")
+    elif wynik == "komputer":
+        print("Przegrales runde!\n")
     else:
-        print("Przegrałeś rundę!\n")
-        return "komputer"
-
+        print("Remis w tej rundzie!")
+    return wynik
 
 def play_best_of_x(cel):
     """Opcja 2/3 - best of X"""
@@ -84,6 +84,13 @@ def play_best_of_x(cel):
         print("💻 Komputer wygrał grę!")
     print(f"Ostateczny wynik: {wygrane_gracz} - {wygrane_komputer}")
 
+def determine_winner(ruch_gracza, ruch_komputera):
+    if ruch_gracza == ruch_komputera:
+        return "remis"
+    elif ZASADY[ruch_gracza] == ruch_komputera:
+        return "gracz"
+    else:
+        return "komputera"
 
 def main():
     while True:

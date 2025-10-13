@@ -29,13 +29,13 @@ class UnitTestKPN(unittest.TestCase):
     def test_wygrana_komputera(self):
                 """Testuje wszystkie możliwe przegrane gracza (wygrane komputera)."""
                  # Gracz: kamien, Komputer: papier
-                self.assertEqual(determine_winner("kamien", "papier"), "komputera",
+                self.assertEqual(determine_winner("kamien", "papier"), "komputer",
                      "Oczekiwano wygranej komputera: kamien vs papier")
                 # Gracz: papier, Komputer: nozyce
-                self.assertEqual(determine_winner("papier", "nozyce"), "komputera",
+                self.assertEqual(determine_winner("papier", "nozyce"), "komputer",
                      "Oczekiwano wygranej komputera: papier vs nozyce")
                 # Gracz: nozyce, Komputer: kamien
-                self.assertEqual(determine_winner("nozyce", "kamien"), "komputera",
+                self.assertEqual(determine_winner("nozyce", "kamien"), "komputer",
                      "Oczekiwano wygranej komputera: nozyce vs kamien")
 
     # Dodatkowe testy stałych (dla przyszłych zmian)
@@ -49,6 +49,22 @@ class UnitTestKPN(unittest.TestCase):
                     self.assertIn(bity_ruch, MOZLIWE_RUCHY,
                       f"Ruch '{ruch}' bije '{bity_ruch}', który nie jest zdefiniowany jako możliwy ruch.")
 
+    def test_ai_losowe_na_poczatku(self):
+        historia_krotka = ["kamien","papier"]
+        #powienien zwrocic jeden z mozliwych ruchow, bo historia jest za krotka,
+        # assertIn poniewaz zwraca wynik losowy, a nie konkretna wartosc jak przyassertEqual
+        self.assertIn(ai_przewidujace(historia_krotka), MOZLIWE_RUCHY)
 
+    def test_ai_przewidywanie_wzorca_nozyce_papier(self):
+        #"gracz powtarza N-P. Po (N, P) gracz zagral N. AI przewiduje czy jest N jak jest to powinien zagrac K (Kamien)."
+        #wzorzec N-P powtarza sie, a po nim zawsze N
+        historia_gracza = [
+            "nozyce", "papier", "nozyce",
+            "nozyce", "papier", "nozyce",
+            "nozyce", "papier",  #ostatnie dwa ruchy
+        ]
+        #oczekiwany ruch gracza to nozyce
+        #oczekiwany ruch AI to kamien
+        self.assertEqual(ai_przewidujace(historia_gracza),"kamien","AI powinna zagrac Kamien, aby pokonac przeidywane nozyce.")
 if __name__ == '__main__':
     unittest.main()
